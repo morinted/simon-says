@@ -1,0 +1,45 @@
+.game-button {
+  display: inline-block;
+  color: black;
+  border-radius: 25%;
+  font-size: 50px;
+  margin: 10px;
+  border: none;
+  width: 80px;
+  height: 80px;
+}
+
+.greenGameButton {
+  composes: game-button;
+  background-color: #00e817;
+}
+
+.redGameButton {
+  composes: game-button;
+  background-color: #ff3d3d;
+}
+
+.blueGameButton {
+  composes: game-button;
+  background-color: #3dc8ff;
+}
+
+.yellowGameButton {
+  composes: game-button;
+  background-color: #ede615;
+}
+
+.purpleGameButton {
+  composes: game-button;
+  background-color: #9e54ff;
+}
+
+.orangeGameButton {
+  composes: game-button;
+  background-color: #fa9600;
+}
+
+.pinkGameButton {
+  composes: game-button;
+  background-color: #ff73d3;
+}
