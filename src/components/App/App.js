@@ -1,17 +1,19 @@
-import React from 'react';
-import styles from './App.module.css';
-import useSimonSays from '../../hooks/useSimonSays/useSimonSays';
-import GameButton from '../GameButton/GameButton';
+import React from 'react'
+import styles from './App.module.css'
+import useSimonSays from '../../hooks/useSimonSays/useSimonSays'
+import { BUTTONS } from '../../constants/constants'
+import GameButton from '../GameButton/GameButton'
 import { chunk } from 'lodash'
+import GameText from '../GameText/GameText'
 
 function App() {
-  const { buttons, onButtonClick, message, gameInfo } = useSimonSays()
+  const { onButtonClick, simonSaysState } = useSimonSays()
   return (
     <div className={styles.root}>
       <header className={styles.header}>
-        { gameInfo }
-        <p className={styles.gameMessage}>{ message }</p>
-        { chunk(buttons, Math.ceil(buttons.length / 3)).map(
+        <GameText simonSaysState={simonSaysState} />
+
+        { chunk(BUTTONS, Math.ceil(BUTTONS.length / 3)).map(
             (buttonRow, rowIndex) =>
               <div key={rowIndex}>
                 { buttonRow.map(button =>

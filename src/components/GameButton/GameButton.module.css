@@ -1,3 +1,6 @@
+@value colors: "../../styles/colors.module.css";
+@value blue, red, green, orange, pink, purple, yellow from colors;
+
 .game-button {
   display: inline-block;
   color: black;
@@ -11,35 +14,35 @@
 
 .greenGameButton {
   composes: game-button;
-  background-color: #00e817;
+  background-color: green;
 }
 
 .redGameButton {
   composes: game-button;
-  background-color: #ff3d3d;
+  background-color: red;
 }
 
 .blueGameButton {
   composes: game-button;
-  background-color: #3dc8ff;
+  background-color: blue;
 }
 
 .yellowGameButton {
   composes: game-button;
-  background-color: #ede615;
+  background-color: yellow;
 }
 
 .purpleGameButton {
   composes: game-button;
-  background-color: #9e54ff;
+  background-color: purple;
 }
 
 .orangeGameButton {
   composes: game-button;
-  background-color: #fa9600;
+  background-color: orange;
 }
 
 .pinkGameButton {
   composes: game-button;
-  background-color: #ff73d3;
+  background-color: pink;
 }

@@ -1,0 +1,7 @@
+@value colors: "../../styles/colors.module.css";
+
+.challengeMessage {
+  font-style: italic;
+  font-size: 150%;
+}
+
