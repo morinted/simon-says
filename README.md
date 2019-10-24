@@ -2,6 +2,26 @@
 
 A simple Simon Says game written with [Create React App](https://github.com/facebook/create-react-app). Only do the actions that Simon says otherwise you lose!
 
+## Getting started
+
+### npm
+
+```sh
+git clone https://github.com/morinted/simon-says.git
+cd simon-says
+npm install
+npm start
+```
+
+### yarn
+
+```sh
+git clone https://github.com/morinted/simon-says.git
+cd simon-says
+yarn
+yarn start
+```
+
 ## Available Scripts
 
 In the project directory, you can run:
