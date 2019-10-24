@@ -1,11 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { isEqual } from 'lodash'
-import Phrase from '../../components/ChallengeMessage/ChallengeMessage'
 import {
   STATE,
   randomPhrase,
   randomButton,
-  BUTTONS,
   GAME_LOSS_TYPE,
   TIMEOUT
 } from '../../constants/constants'
@@ -18,7 +16,6 @@ export default function useSimonSays() {
   const [goalButton, setGoalButton] = useState(randomButton())
   const [simonSays, setSimonSays] = useState(true)
   const [phraseType, setPhraseType] = useState(randomPhrase())
-  const [textColor, setTextColor] = useState(randomButton().color)
 
   const [lossType, setLossType] = useState('')
 
@@ -31,7 +28,6 @@ export default function useSimonSays() {
   const nextChallenge = useCallback(() => {
     const newPhrase = randomPhrase()
     const newGoalButton = randomButton()
-    const newTextColor = randomButton().color
 
     // Slightly more likely to get Simon than not.
     const newSimonSays = Math.random() < 3 / 5
@@ -39,8 +35,7 @@ export default function useSimonSays() {
 
     if (newPhrase === phraseType &&
       isEqual(newGoalButton, goalButton) &&
-      newSimonSays === simonSays &&
-      newTextColor === textColor
+      newSimonSays === simonSays
     ) {
       // Challenge did not change, so reroll.
       nextChallenge()
@@ -49,9 +44,8 @@ export default function useSimonSays() {
       setPhraseType(newPhrase)
       setGoalButton(newGoalButton)
       setSimonSays(newSimonSays)
-      setTextColor(newTextColor)
     }
-  }, [phraseType, goalButton, simonSays, textColor])
+  }, [phraseType, goalButton, simonSays])
 
   const onButtonClick = (button) => {
     // Restart the game when it's done.
