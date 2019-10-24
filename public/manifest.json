@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Simon Says",
+  "name": "React Hooks demo showing the children's game Simon Says",
   "icons": [
     {
       "src": "favicon.ico",
