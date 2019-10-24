@@ -1,35 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { sample, isEqual } from 'lodash'
+import { isEqual } from 'lodash'
+import Phrase from '../../components/ChallengeMessage/ChallengeMessage'
+import {
+  STATE,
+  randomPhrase,
+  randomButton,
+  BUTTONS,
+  GAME_LOSS_TYPE,
+  TIMEOUT
+} from '../../constants/constants'
 
-const STATE = {
-  SETUP: 'SETUP',
-  PLAY: 'PLAY',
-  END: 'END'
-}
-
-// Buttons can be colored yellow, red, blue, green, purple, orange, pink
-const BUTTONS = [
-  { number: 1, color: 'yellow' },
-  { number: 2, color: 'red' },
-  { number: 3, color: 'blue' },
-  { number: 4, color: 'green' }
-]
-const randomButton = () => sample(BUTTONS)
-
-// The attribute that Simon uses to describe the button.
-const PHRASE = {
-  COLOR: 'COLOR',
-  NUMBER: 'NUMBER'
-}
-const randomPhrase = () => sample(PHRASE)
-
-const GAME_LOSS_TYPE = {
-  BUTTON: 'BUTTON',
-  TIME: 'TIME',
-  SIMON: 'SIMON'
-}
-
-const TIMEOUT = 2000
 
 export default function useSimonSays() {
   const [gameState, setGameState] = useState(STATE.SETUP)
@@ -37,7 +17,8 @@ export default function useSimonSays() {
 
   const [goalButton, setGoalButton] = useState(randomButton())
   const [simonSays, setSimonSays] = useState(true)
-  const [phrase, setPhrase] = useState(randomPhrase())
+  const [phraseType, setPhraseType] = useState(randomPhrase())
+  const [textColor, setTextColor] = useState(randomButton().color)
 
   const [lossType, setLossType] = useState('')
 
@@ -50,24 +31,27 @@ export default function useSimonSays() {
   const nextChallenge = useCallback(() => {
     const newPhrase = randomPhrase()
     const newGoalButton = randomButton()
-    const newSimonSays = sample(
-      // Slightly more likely to get Simon than not.
-      [true, true, true, false, false]
-    )
+    const newTextColor = randomButton().color
 
-    if (newPhrase === phrase &&
+    // Slightly more likely to get Simon than not.
+    const newSimonSays = Math.random() < 3 / 5
+
+
+    if (newPhrase === phraseType &&
       isEqual(newGoalButton, goalButton) &&
-      newSimonSays === simonSays
+      newSimonSays === simonSays &&
+      newTextColor === textColor
     ) {
       // Challenge did not change, so reroll.
       nextChallenge()
     } else {
       setChallengeIndex(index => index + 1)
-      setPhrase(newPhrase)
+      setPhraseType(newPhrase)
       setGoalButton(newGoalButton)
       setSimonSays(newSimonSays)
+      setTextColor(newTextColor)
     }
-  }, [phrase, goalButton, simonSays])
+  }, [phraseType, goalButton, simonSays, textColor])
 
   const onButtonClick = (button) => {
     // Restart the game when it's done.
@@ -112,62 +96,17 @@ export default function useSimonSays() {
     return () => clearTimeout(challengeTimeout)
   }, [challengeIndex, gameState, simonSays, endGame, nextChallenge])
 
-  // Get a string describing the current challenge or loss type.
-  const getGameMessage = () => {
-    const buttonDescription =
-      phrase === PHRASE.COLOR ?
-        `the ${goalButton.color} button` :
-        `button number ${goalButton.number}`
-
-    switch (gameState) {
-      case STATE.END:
-        if (lossType === GAME_LOSS_TYPE.BUTTON) {
-          return 'You pressed the wrong button.'
-        } else if (lossType === GAME_LOSS_TYPE.SIMON) {
-          return "I didn't say Simon says!"
-        } else {
-          return 'You took too long to respond!'
-        }
-
-      case STATE.SETUP:
-      case STATE.PLAY:
-      default:
-        return (
-          `${
-            simonSays ? 'Simon says press' : 'Press'
-          } ${buttonDescription}`
-        )
-    }
-  }
-
-  // Get additional info for the beginning or end of the game.
-  const getInfo = () => {
-    switch (gameState) {
-      case STATE.SETUP:
-        return <>
-          <p>Simply press the buttons that Simon asks you to.</p>
-          <p><strong>You lose</strong> if you:</p>
-          <ul style={{ textAlign: 'left' }}>
-            <li>Press the wrong button</li>
-            <li>Do anything without Simon</li>
-            <li>Take too long</li>
-          </ul>
-          </>
-      case STATE.END:
-        return <>
-          <p>You made it through {challengeIndex} challenge{challengeIndex === 1 ? '' : 's'}.</p>
-          <p>Press any button to restart.</p>
-        </>
-      default:
-        return ''
-    }
-  }
-
   return (
-    { buttons: BUTTONS
-    , onButtonClick
-    , message: getGameMessage()
-    , gameInfo: getInfo()
+    { onButtonClick
+    , simonSaysState:
+      {
+        gameState,
+        goalButton,
+        simonSays,
+        lossType,
+        phraseType,
+        challengeIndex
+      }
     }
   )
 }

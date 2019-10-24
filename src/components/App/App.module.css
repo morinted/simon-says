@@ -12,8 +12,3 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
-
-.gameMessage {
-  font-style: italic;
-  font-size: 130%;
-}
