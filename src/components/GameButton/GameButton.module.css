@@ -11,6 +11,13 @@
   width: 80px;
   height: 80px;
 }
+.game-button:hover {
+  border: 6px dotted white;
+}
+.game-button:active {
+  opacity: 0.8;
+  transform: scale(0.9);
+}
 
 .greenGameButton {
   composes: game-button;
