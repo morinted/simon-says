@@ -10,6 +10,18 @@
   border: none;
   width: 80px;
   height: 80px;
+  animation: buttonRotate 1s linear infinite;
+  animation-play-state: paused;     
+}
+
+.game-button:focus, .game-button:hover {
+  animation-play-state: running; 
+}
+
+@keyframes buttonRotate {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(0.8); }
+  100% { transform: rotate(360deg) scale(1); }
 }
 .game-button:hover {
   border: 6px dotted white;
