@@ -1,4 +1,4 @@
-import { sample } from 'lodash'
+import { sample, shuffle, range } from 'lodash'
 
 export const STATE = {
   SETUP: 'SETUP',
@@ -17,14 +17,15 @@ export const COLORS = {
 }
 export const randomColor = () => sample(COLORS)
 
-// Buttons can be colored yellow, red, blue, green, purple, orange, pink
-export const BUTTONS = [
-  { number: 1, color: 'yellow' },
-  { number: 2, color: 'red' },
-  { number: 3, color: 'blue' },
-  { number: 4, color: 'green' }
-]
-export const randomButton = () => sample(BUTTONS)
+export const randomButtons = buttonCount => 
+{
+  const colors = shuffle(Object.keys(COLORS))
+  return shuffle(
+    range(buttonCount)
+      .map((_, index) => 
+      ({number: index + 1, color: colors[index % colors.length]})
+    ))
+}
 
 // The attribute that Simon uses to describe the button.
 export const PHRASE = {
@@ -40,3 +41,5 @@ export const GAME_LOSS_TYPE = {
 }
 
 export const TIMEOUT = 2000
+
+export const BUTTONCOUNT = 4
