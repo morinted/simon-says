@@ -1,21 +1,28 @@
 import { useState, useEffect, useCallback } from 'react'
-import { isEqual } from 'lodash'
+import { isEqual, sample } from 'lodash'
 import {
   STATE,
   randomPhrase,
-  randomButton,
+  randomButtons,
   GAME_LOSS_TYPE,
-  TIMEOUT
+  TIMEOUT,
+  BUTTONCOUNT,
 } from '../../constants/constants'
 
 
 export default function useSimonSays() {
   const [gameState, setGameState] = useState(STATE.SETUP)
   const [challengeIndex, setChallengeIndex] = useState(0)
+  
+  const [buttons, setButtons] = useState(randomButtons(BUTTONCOUNT))
 
-  const [goalButton, setGoalButton] = useState(randomButton())
+  const [goalButton, setGoalButton] = useState(sample(buttons))
   const [simonSays, setSimonSays] = useState(true)
   const [phraseType, setPhraseType] = useState(randomPhrase())
+
+  const[clickTimes, setClickTimes] = useState([])
+  const[challengeStart, setChallengeStart] = useState(0)
+
 
   const [lossType, setLossType] = useState('')
 
@@ -26,8 +33,9 @@ export default function useSimonSays() {
 
   // Count a success and present the user with the next challenge.
   const nextChallenge = useCallback(() => {
+    const newButtons = randomButtons(BUTTONCOUNT)
     const newPhrase = randomPhrase()
-    const newGoalButton = randomButton()
+    const newGoalButton = sample(newButtons)
 
     // Slightly more likely to get Simon than not.
     const newSimonSays = Math.random() < 3 / 5
@@ -44,6 +52,8 @@ export default function useSimonSays() {
       setPhraseType(newPhrase)
       setGoalButton(newGoalButton)
       setSimonSays(newSimonSays)
+      setButtons(newButtons)
+      setChallengeStart(Date.now())
     }
   }, [phraseType, goalButton, simonSays])
 
@@ -52,12 +62,19 @@ export default function useSimonSays() {
     if (gameState === STATE.END) {
       setGameState(STATE.PLAY)
       setChallengeIndex(0)
+      setChallengeStart(Date.now())
+      setClickTimes([])
       return
     }
 
     // Enable timed responses after the first response.
     if (gameState === STATE.SETUP) {
       setGameState(STATE.PLAY)
+    }
+    // Ignores first click time.
+    else
+    {
+      setClickTimes(clickTimes.concat(Date.now() - challengeStart))
     }
 
     // Check the clicked button against the challenge.
@@ -99,7 +116,9 @@ export default function useSimonSays() {
         simonSays,
         lossType,
         phraseType,
-        challengeIndex
+        challengeIndex,
+        buttons,
+        clickTimes,
       }
     }
   )
